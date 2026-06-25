@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logbook Magang BPK</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div id="login-screen" class="login-screen">
+      <div class="login-card">
+        <div class="login-brand">
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L4 5v6c0 5 3.6 9.5 8 11 4.4-1.5 8-6 8-11V5l-8-3z" fill="currentColor" />
+              <path d="M9.5 8h5l-.5 5.5h-4L9.5 8z" fill="#eef6ff" />
+              <text x="50%" y="78%" text-anchor="middle" font-size="8" font-weight="700" fill="#eef6ff" font-family="Inter, sans-serif">BPK</text>
+            </svg>
+          </div>
+          <div>
+            <h1>Logbook Magang</h1>
+            <p>Masuk untuk mulai mengisi logbook.</p>
+          </div>
+        </div>
+
+        <div class="login-tabs">
+          <button type="button" class="login-tab active" id="login-tab">Masuk</button>
+          <button type="button" class="login-tab" id="signup-tab">Daftar</button>
+        </div>
+
+        <form id="login-form" class="form-panel login-form">
+          <label>
+            Email
+            <input type="email" id="login-email" placeholder="email@domain.com" required />
+          </label>
+          <label class="password-field">
+            Kata Sandi
+            <div class="password-input-wrap">
+              <input type="password" id="login-password" placeholder="********" required />
+              <button type="button" id="toggle-login-password" class="button button-secondary small password-toggle eye-toggle" aria-label="Tampilkan kata sandi">👁</button>
+            </div>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="button button-primary">Masuk</button>
+          </div>
+        </form>
+
+        <form id="signup-form" class="form-panel login-form hidden">
+          <label>
+            Nama Lengkap
+            <input type="text" id="signup-name" placeholder="Nama lengkap" required />
+          </label>
+          <label>
+            Email
+            <input type="email" id="signup-email" placeholder="email@domain.com" required />
+          </label>
+          <label class="password-field">
+            Kata Sandi
+            <div class="password-input-wrap">
+              <input type="password" id="signup-password" placeholder="********" required />
+              <button type="button" id="toggle-signup-password" class="button button-secondary small password-toggle eye-toggle" aria-label="Tampilkan kata sandi">👁</button>
+            </div>
+          </label>
+          <label class="password-field">
+            Konfirmasi Kata Sandi
+            <div class="password-input-wrap">
+              <input type="password" id="signup-confirm-password" placeholder="********" required />
+              <button type="button" id="toggle-signup-confirm-password" class="button button-secondary small password-toggle eye-toggle" aria-label="Tampilkan konfirmasi kata sandi">👁</button>
+            </div>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="button button-primary">Daftar</button>
+          </div>
+        </form>
+
+        <div id="auth-message" class="auth-message hidden"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L4 5v6c0 5 3.6 9.5 8 11 4.4-1.5 8-6 8-11V5l-8-3z" fill="currentColor" />
+            <path d="M9.5 8h5l-.5 5.5h-4L9.5 8z" fill="#eef6ff" />
+            <text x="50%" y="78%" text-anchor="middle" font-size="8" font-weight="700" fill="#eef6ff" font-family="Inter, sans-serif">BPK</text>
+          </svg>
+        </div>
+        <div>
+          <h1>Logbook Magang</h1>
+          <p>Perwakilan Provinsi Riau</p>
+        </div>
+      </div>
+      <div class="sidebar-welcome">
+        Halo, <strong id="user-name-display">Tamu</strong>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#dashboard" class="nav-link active">Dashboard</a>
+        <a href="#isi-logbook" class="nav-link">Isi Logbook</a>
+        <a href="#riwayat" class="nav-link">Riwayat</a>
+        <a href="#profil" class="nav-link">Profil</a>
+        <a href="#panduan" class="nav-link">Panduan</a>
+      </nav>
+      <button id="logout-button" class="button button-secondary sidebar-logout hidden">Keluar</button>
+
+      <div class="sidebar-note">
+        <h2>Catatan</h2>
+        <p>Isi logbook setiap hari kerja dengan lengkap: kegiatan, hasil, dan kendala.</p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="dashboard" class="section-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h2>Ringkasan Magang</h2>
+          </div>
+          <span class="badge">Terakhir diperbarui: hari ini</span>
+        </div>
+
+        <div class="grid cards-grid">
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">📅</span>
+              <p class="card-title">Hari Terisi</p>
+            </div>
+            <h3 id="summary-days">0</h3>
+            <p>Jumlah catatan logbook yang sudah diisi.</p>
+          </article>
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">✅</span>
+              <p class="card-title">Tugas Terlihat</p>
+            </div>
+            <h3 id="summary-tasks">0</h3>
+            <p>Total aktivitas yang tercatat.</p>
+          </article>
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">⏱️</span>
+              <p class="card-title">Jam Kerja</p>
+            </div>
+            <h3 id="summary-hours">0</h3>
+            <p>Estimasi total jam kerja yang dicatat.</p>
+          </article>
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">🎯</span>
+              <p class="card-title">Selesai</p>
+            </div>
+            <h3 id="summary-complete">0</h3>
+            <p>Jumlah entri yang sudah selesai.</p>
+          </article>
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">⏳</span>
+              <p class="card-title">Belum Selesai</p>
+            </div>
+            <h3 id="summary-incomplete">0</h3>
+            <p>Jumlah entri yang belum selesai.</p>
+          </article>
+          <article class="card">
+            <div class="card-header">
+              <span class="card-icon">❌</span>
+              <p class="card-title">Tidak Selesai</p>
+            </div>
+            <h3 id="summary-failed">0</h3>
+            <p>Jumlah entri yang tidak selesai.</p>
+          </article>
+        </div>
+
+        <div id="dashboard-empty-state" class="empty-state hidden">
+          <div class="empty-state-icon">📊</div>
+          <h3>Belum ada data</h3>
+          <p>Mulai isi logbook untuk melihat ringkasan di sini</p>
+          <a href="#isi-logbook" class="button button-primary small">Mulai Isi Logbook</a>
+        </div>
+      </section>
+
+      <section id="isi-logbook" class="section-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Isi Logbook</p>
+            <h2>Tambah Entri Baru</h2>
+          </div>
+        </div>
+
+        <form id="logbook-form" class="form-panel">
+          <div class="form-grid">
+            <label>
+              Tanggal
+              <input type="date" id="tanggal" required />
+            </label>
+            <label>
+              Unit Kerja / Lokasi
+              <input type="text" id="unit" placeholder="Contoh: Sekretariat" required />
+            </label>
+            <label>
+              Jadwal Jam Kerja
+              <input type="text" id="jam" placeholder="Contoh: 08:00 - 16:00" required />
+            </label>
+            <label>
+              Status Entri
+              <select id="status">
+                <option value="Draft">Draft</option>
+                <option value="Terkirim">Terkirim</option>
+                <option value="Disetujui">Disetujui</option>
+              </select>
+            </label>
+            <label>
+              Progres Hasil
+              <select id="progress">
+                <option value="Selesai">Selesai</option>
+                <option value="Belum selesai">Belum selesai</option>
+                <option value="Tidak selesai">Tidak selesai</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Kegiatan
+            <textarea id="kegiatan" rows="4" placeholder="Tuliskan kegiatan utama yang dilakukan" required></textarea>
+          </label>
+          <label>
+            Hasil / Pencapaian
+            <textarea id="hasil" rows="3" placeholder="Hasil yang dicapai dari kegiatan" required></textarea>
+          </label>
+          <label>
+            Kendala / Catatan
+            <textarea id="kendala" rows="3" placeholder="Jika ada kendala, catat di sini"></textarea>
+          </label>
+
+          <div id="save-message" class="notification hidden"></div>
+
+          <div class="form-actions">
+            <button type="reset" class="button button-secondary">Reset</button>
+            <button type="submit" class="button button-primary">Simpan Entri</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="riwayat" class="section-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Riwayat</p>
+            <h2>Daftar Entri Logbook</h2>
+          </div>
+          <div class="history-filters">
+            <label class="filter-label">
+              Status Entri
+              <select id="history-status-filter">
+                <option value="all">Semua</option>
+                <option value="Draft">Draft</option>
+                <option value="Terkirim">Terkirim</option>
+                <option value="Disetujui">Disetujui</option>
+              </select>
+            </label>
+            <label class="filter-label">
+              Filter Progres
+              <select id="history-progress-filter">
+                <option value="all">Semua</option>
+                <option value="Selesai">Selesai</option>
+                <option value="Belum selesai">Belum selesai</option>
+                <option value="Tidak selesai">Tidak selesai</option>
+              </select>
+            </label>
+            <label class="filter-label">
+              Dari Tanggal
+              <input type="date" id="history-date-from" />
+            </label>
+            <label class="filter-label">
+              Sampai Tanggal
+              <input type="date" id="history-date-to" />
+            </label>
+            <label class="filter-label search-label">
+              Cari riwayat
+              <input type="search" id="history-search" placeholder="Cari kegiatan, hasil, atau kendala" />
+            </label>
+            <div class="filter-button-wrap">
+              <button type="button" id="history-reset-filters" class="button button-secondary">Reset Filter</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="history-table">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Unit Kerja</th>
+                <th>Kegiatan</th>
+                <th>Status</th>
+                <th>Progres</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+            </tbody>
+          </table>
+          <div id="history-empty-state" class="empty-state-table hidden">
+            <div class="empty-state-icon">📝</div>
+            <h3>Belum ada riwayat</h3>
+            <p>Mulai isi logbook untuk melihat histori entri di sini</p>
+            <a href="#isi-logbook" class="button button-primary small">Isi Logbook Sekarang</a>
+          </div>
+        </div>
+
+        <div id="history-detail" class="history-detail hidden">
+          <div class="history-detail-header">
+            <h3>Detail Entri</h3>
+            <div class="detail-actions">
+              <button type="button" class="button button-primary small" id="edit-detail">Edit</button>
+              <button type="button" class="button button-secondary small" id="close-detail">Tutup</button>
+            </div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-row"><strong>Tanggal:</strong> <span id="detail-tanggal"></span></div>
+            <div class="detail-row"><strong>Unit Kerja:</strong> <span id="detail-unit"></span></div>
+            <div class="detail-row"><strong>Jam Kerja:</strong> <span id="detail-jam"></span></div>
+            <div class="detail-row"><strong>Status:</strong> <span id="detail-status"></span></div>
+            <div class="detail-row"><strong>Progres:</strong> <span id="detail-progress"></span></div>
+            <div class="detail-row"><strong>Kegiatan:</strong> <span id="detail-kegiatan"></span></div>
+            <div class="detail-row"><strong>Hasil / Pencapaian:</strong> <span id="detail-hasil"></span></div>
+            <div class="detail-row"><strong>Kendala / Catatan:</strong> <span id="detail-kendala"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profil" class="section-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Profil</p>
+            <h2>Data Peserta Magang</h2>
+          </div>
+          <button type="button" id="toggle-edit-profile" class="button button-secondary small">Edit Profil</button>
+        </div>
+
+        <!-- Profile Display View -->
+        <div id="profile-display-view" class="profile-display-view">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <div class="avatar-placeholder">👤</div>
+            </div>
+            <div class="profile-info">
+              <h3 id="display-name">Nama Peserta</h3>
+              <p class="profile-subtitle">Peserta Magang BPK RI Perwakilan Provinsi Riau</p>
+              <div class="profile-meta">
+                <span class="badge-status">Aktif</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-details-grid">
+            <div class="profile-detail-item">
+              <label>NIM/NIP</label>
+              <p id="display-id">123456789</p>
+            </div>
+            <div class="profile-detail-item">
+              <label>Jurusan</label>
+              <p id="display-study">Akuntansi / Hukum</p>
+            </div>
+            <div class="profile-detail-item">
+              <label>Universitas</label>
+              <p id="display-university">Universitas Negeri</p>
+            </div>
+            <div class="profile-detail-item">
+              <label>Periode Magang</label>
+              <p id="display-period">Juni - Agustus 2026</p>
+            </div>
+            <div class="profile-detail-item">
+              <label>Pembimbing</label>
+              <p id="display-mentor">Nama Pembimbing</p>
+            </div>
+            <div class="profile-detail-item">
+              <label>Email</label>
+              <p id="display-email">peserta@email.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Edit Form -->
+        <div id="profile-edit-view" class="profile-edit-view hidden">
+          <form id="profile-form" class="profile-form">
+            <div class="form-grid">
+              <label>
+                Nama Lengkap
+                <input type="text" id="profile-name" placeholder="Nama Peserta" required />
+              </label>
+              <label>
+                NIM/NIP
+                <input type="text" id="profile-id" placeholder="123456789" required />
+              </label>
+              <label>
+                Universitas
+                <input type="text" id="profile-university" placeholder="Nama Universitas" required />
+              </label>
+              <label>
+                Jurusan
+                <input type="text" id="profile-study" placeholder="Jurusan / Program Studi" required />
+              </label>
+              <label>
+                Email
+                <input type="email" id="profile-email" placeholder="peserta@email.com" required />
+              </label>
+              <label>
+                Periode Magang
+                <input type="text" id="profile-period" placeholder="Juni - Agustus 2026" required />
+              </label>
+              <label>
+                Pembimbing
+                <input type="text" id="profile-mentor" placeholder="Nama Pembimbing" required />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="button" id="cancel-edit-profile" class="button button-secondary">Batal</button>
+              <button type="submit" class="button button-primary">Simpan Perubahan</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="panduan" class="section-panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Panduan</p>
+            <h2>Tips Pengisian Logbook</h2>
+          </div>
+        </div>
+
+        <ul class="guide-list">
+          <li>Isi logbook setiap hari kerja dengan detail kegiatan dan hasil.</li>
+          <li>Gunakan bahasa singkat, jelas, dan profesional.</li>
+          <li>Catat kendala agar pembimbing bisa memberi masukan.</li>
+          <li>Simpan sebagai Draft terlebih dahulu jika belum lengkap.</li>
+          <li>Cek kembali sebelum mengirimkan kepada pembimbing.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
